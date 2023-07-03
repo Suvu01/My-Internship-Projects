@@ -55,7 +55,7 @@ public:
     inline void placeBet();
     inline int getBet();
 
-    // Push cards to the decks of me and dealer:
+    // Push cards to myCards and dealer:
     inline void pushMyCard(int val);
     inline void pushDealerCard(int val);
 
@@ -298,6 +298,7 @@ int Blackjack::getBet()
     return bet;
 }
 
+//Push cards to myCards and dealer:
 void Blackjack::pushMyCard(int val)
 {
     myCards.push_back(val);
