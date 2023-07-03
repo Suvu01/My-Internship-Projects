@@ -22,8 +22,8 @@ Color codes used in the program:
 10 : Bright green
 11 : Bright cyan
 12 : Bright red
-13 : pink
-14 : yellow
+13 : Pink
+14 : Yellow
 15 : Bright white
 
 */
