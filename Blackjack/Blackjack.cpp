@@ -198,8 +198,10 @@ int main()
         {
             if (me.getSum() == 0)
             {
+                SetConsoleTextAttribute(col, 10);
                 cout << "Thanks for playing. You go home with $" << me.getSum() << ". Visit again." << endl
                      << endl;
+                SetConsoleTextAttribute(col, 15);
                 break;
             }
             bool ask = B.NewGame();
