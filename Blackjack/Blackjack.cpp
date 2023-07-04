@@ -1,34 +1,10 @@
 #include <iostream>
-#include <windows.h>
 using namespace std;
 #include <algorithm>
 #include <vector>
 
 #include <cstdlib>
 #include <time.h>
-
-/*
-Color codes used in the program:
-
-1 : Blue
-2 : Green
-3 : Cyan
-4 : Red
-5 : Purple
-6 : Yellow(dark)
-7 : Default white
-8 : Grey
-9 : Bright blue
-10 : Bright green
-11 : Bright cyan
-12 : Bright red
-13 : Pink
-14 : Yellow
-15 : Bright white
-
-*/
-
-HANDLE col = GetStdHandle(STD_OUTPUT_HANDLE);
 
 class PromptTheUser
 {
@@ -38,7 +14,7 @@ private:
 public:
     PromptTheUser()
     {
-        cout << "Enter the starting amount (in $): ";
+        printf("\033[32mEnter the starting amount (in $): \033[0m");
         float amount;
         cin >> amount;
 
@@ -119,18 +95,13 @@ int main()
     for (int i = 0; i < 100; i++)
         probability.push_back(i % 2);
 
-    // Prompt the user to enter the starting amount.
-    SetConsoleTextAttribute(col, 10);
     PromptTheUser me;
-    SetConsoleTextAttribute(col, 15);
 
     while (me.getSum() > 0)
     {
-        SetConsoleTextAttribute(col, 10);
         Blackjack B({}, {}, cards);
         B.placeBet(); // Prompt the user to set a bet in the first round.
         int bet = B.getBet();
-        SetConsoleTextAttribute(col, 15);
 
         me.modify(-bet); // Deduct the bet from the original amount.
 
@@ -161,10 +132,7 @@ int main()
 
         B.DisplayMyCards();
 
-        SetConsoleTextAttribute(col, 11);
-        cout << "One of the cards of the dealer is " << B.dealer[0] << "." << endl
-             << endl;
-        SetConsoleTextAttribute(col, 15);
+        printf("\033[36mOne of the cards of the dealer is %d. \033[0m\n\n", B.dealer[0]);
 
         // While the sum is less than or equal to 21 and user wishes to draw an extra card:
         bool lost = false;
@@ -198,21 +166,15 @@ int main()
         {
             if (me.getSum() == 0)
             {
-                SetConsoleTextAttribute(col, 10);
-                cout << "Thanks for playing. You go home with $" << me.getSum() << ". Visit again." << endl
-                     << endl;
-                SetConsoleTextAttribute(col, 15);
+                printf("\033[32mThanks for playing. You go home with $%.0f. Visit again. \033[0m\n\n", me.getSum());
                 break;
             }
+
             bool ask = B.NewGame();
             if (ask)
                 continue;
 
-            SetConsoleTextAttribute(col, 10);
-            cout << "Thanks for playing. You go home with $" << me.getSum() << ". Visit again." << endl
-                 << endl;
-            SetConsoleTextAttribute(col, 15);
-
+            printf("\033[32mThanks for playing. You go home with $%.0f. Visit again. \033[0m\n\n", me.getSum());
             break;
         }
 
@@ -253,11 +215,7 @@ int main()
             if (ask)
                 continue;
 
-            SetConsoleTextAttribute(col, 10);
-            cout << "Thanks for playing. You go home with $" << me.getSum() << ". Visit again." << endl
-                 << endl;
-            SetConsoleTextAttribute(col, 15);
-
+            printf("\033[32mThanks for playing. You go home with $%.0f. Visit again. \033[0m\n\n", me.getSum());
             break;
         }
 
@@ -286,11 +244,7 @@ int main()
         if (ask)
             continue;
 
-        SetConsoleTextAttribute(col, 10);
-        cout << "Thanks for playing. You go home with $" << me.getSum() << ". Visit again." << endl
-             << endl;
-        SetConsoleTextAttribute(col, 15);
-
+        printf("\033[32mThanks for playing. You go home with $%.0f. Visit again. \033[0m\n\n", me.getSum());
         break;
     }
     return 0;
@@ -314,18 +268,13 @@ void PromptTheUser::modify(float net_addition)
 
 void PromptTheUser::myAmount()
 {
-    SetConsoleTextAttribute(col, 13);
-
-    cout << "You have $" << sum << " left." << endl
-         << endl;
-
-    SetConsoleTextAttribute(col, 15);
+    printf("\033[32mYou have $%.0f left. \033[0m\n", sum);
 }
 
 // Member Functions for an object of class Blackjack:
 void Blackjack::placeBet()
 {
-    cout << "Enter the amount you wish to bet (in $): ";
+    printf("\033[32mEnter the amount you wish to bet (in $): \033[0m");
     int amount;
     cin >> amount;
 
@@ -366,92 +315,63 @@ int Blackjack::DealerSum()
 // Game Status:
 void Blackjack::JackPot()
 {
-    SetConsoleTextAttribute(col, 10);
-    cout << "Blackjack! You Won The Game!" << endl
-         << endl;
-
-    SetConsoleTextAttribute(col, 15);
+    printf("\033[32mBlackjack! You Won The Game! \033[0m \n\n");
 }
 
 void Blackjack::Win()
 {
-    SetConsoleTextAttribute(col, 10);
-
-    cout << "Congrats! You Won The Game!" << endl
-         << endl;
-
-    SetConsoleTextAttribute(col, 15);
+    printf("\033[32mCongrats! You Won The Game! \033[0m \n\n");
 }
 
 void Blackjack::Lost()
 {
-    SetConsoleTextAttribute(col, 10);
-
-    cout << "Dealer Wins!" << endl
-         << endl;
-
-    SetConsoleTextAttribute(col, 15);
+    printf("\033[32mDealer Wins! \033[0m \n\n");
 }
 
 void Blackjack::Push()
 {
-    SetConsoleTextAttribute(col, 10);
-
-    cout << "Push! The Game is a Draw." << endl
-         << endl;
-
-    SetConsoleTextAttribute(col, 15);
+    printf("\033[32mPush! The Game is a Draw. \033[0m \n\n");
 }
 
 // Displaying cards:
 void Blackjack::DisplayMyCards()
 {
-    SetConsoleTextAttribute(col, 14);
+    printf("\033[33mYour cards are given below: \033[0m\n");
+    printf("\033[33m[\033[0m");
 
-    cout << "Your cards are given below:" << endl;
-    cout << "[";
     for (int i = 0; i < myCards.size() - 1; i++)
-        cout << myCards[i] << ", ";
-    cout << myCards[myCards.size() - 1];
-    cout << "]";
-    cout << endl;
-    cout << "The sum of your cards is " << my_sum << "." << endl
-         << endl;
+        printf("\033[33m%d, \033[0m", myCards[i]);
+    printf("\033[33m%d\033[0m", myCards[myCards.size() - 1]);
 
-    SetConsoleTextAttribute(col, 15);
+    printf("\033[33m]\033[0m\n");
+    printf("\033[33mThe sum of your cards is %d. \033[0m\n\n", my_sum);
 }
 
 void Blackjack::DisplayDealerCards()
 {
-    SetConsoleTextAttribute(col, 11);
+    printf("\033[36mThe dealer cards are given below: \033[0m\n");
+    printf("\033[36m[\033[0m");
 
-    cout << "The dealer's cards are given below:" << endl;
-    cout << "[";
     for (int i = 0; i < dealer.size() - 1; i++)
-        cout << dealer[i] << ", ";
-    cout << dealer[dealer.size() - 1];
-    cout << "]";
-    cout << endl;
-    cout << "The sum of the dealer's cards is " << d_sum << "." << endl
-         << endl;
+        printf("\033[36m%d, \033[0m", dealer[i]);
+    printf("\033[36m%d\033[0m", dealer[dealer.size() - 1]);
 
-    SetConsoleTextAttribute(col, 15);
+    printf("\033[36m]\033[0m\n");
+    printf("\033[36mThe sum of the dealer's cards is %d. \033[0m\n\n", d_sum);
 }
 
 // Prompt to ask to play a new game:
 bool Blackjack::NewGame()
 {
-    SetConsoleTextAttribute(col, 13);
-
     char ask;
-    cout << "Do you wish to continue ? (Y / N) " << endl;
+    printf("\033[35mDo you wish to continue ? (Y / N) \033[0m");
     cin >> ask;
 
-    SetConsoleTextAttribute(col, 15);
-
+    while (!(ask == 'Y' or ask == 'y' or ask == 'n' or ask == 'N'))
+        cin >> ask;
     cout << endl;
 
-    if (ask == 'Y')
+    if (ask == 'Y' or ask == 'y')
         return true;
     return false;
 }
@@ -459,17 +379,15 @@ bool Blackjack::NewGame()
 // Ask the user whether to pick an extra card or not:
 bool Blackjack::ExtraCard()
 {
-    SetConsoleTextAttribute(col, 13);
-
     char ask;
-    cout << "Do you wish to pick an extra card ? (Y / N) " << endl;
+    printf("\033[35mDo you wish to pick an extra card ? (Y / N) \033[0m");
     cin >> ask;
 
-    SetConsoleTextAttribute(col, 15);
-
+    while (!(ask == 'Y' or ask == 'y' or ask == 'n' or ask == 'N'))
+        cin >> ask;
     cout << endl;
 
-    if (ask == 'Y')
+    if (ask == 'Y' or ask == 'y')
         return true;
     return false;
 }
